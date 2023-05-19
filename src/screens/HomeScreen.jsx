@@ -10,20 +10,11 @@ export default function HomeScreen() {
   useEffect(() => {
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () => (
-        <FontAwesome
-          name="search"
-          size={24}
-          color={colors.lightGray}
-          style={styles.headerLeft}
-        />
-      ),
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => (
         <FontAwesome
           name="sign-out"
           size={24}
-          color={colors.lightGray}
+          color={colors.gray}
           style={styles.headerRight}
         />
       )

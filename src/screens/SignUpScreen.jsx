@@ -24,7 +24,6 @@ export default function SignUpScreen({ navigation }) {
         .then((userCredential) => {
           const user = userCredential.user
           console.log('user', user)
-          // navigation.navigate('CreditCard')
         })
         .catch((error) => {
           const errorMessage = error.message
