@@ -1,25 +1,11 @@
-import { Entypo, FontAwesome } from '@expo/vector-icons'
+import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import colors from '../theme/colors'
 
 export default function HomeScreen() {
   const navigation = useNavigation()
-
-  useEffect(() => {
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => (
-        <FontAwesome
-          name="sign-out"
-          size={24}
-          color={colors.gray}
-          style={styles.headerRight}
-        />
-      )
-    })
-  }, [navigation])
 
   return (
     <View style={styles.container}>

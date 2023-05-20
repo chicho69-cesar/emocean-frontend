@@ -6,9 +6,9 @@ import {
   query
 } from 'firebase/firestore'
 import React, { useCallback, useLayoutEffect, useState } from 'react'
+import { StyleSheet } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 
-import { StyleSheet } from 'react-native'
 import { auth, database } from '../config/firebase'
 
 export default function ChatBotScreen() {

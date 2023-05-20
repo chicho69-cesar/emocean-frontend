@@ -19,7 +19,7 @@ export default function CreditCardScreen({ navigation }) {
 
   const onHandleSubmit = () => {
     console.log('Hola xd')
-    navigation.navigate('Home')
+    navigation.navigate('BottomRoot')
   }
 
   return (
