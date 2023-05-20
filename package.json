@@ -19,6 +19,7 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",
+    "aws-sdk": "^2.1381.0",
     "axios": "^1.4.0",
     "expo": "~48.0.15",
     "expo-auth-session": "~4.0.3",
