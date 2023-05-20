@@ -1,37 +1,64 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query
+} from 'firebase/firestore'
+import React, { useCallback, useLayoutEffect, useState } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 
-export default function ChatBotScreen() {
-  const [messages, setMessages] = useState([])
+import { StyleSheet } from 'react-native'
+import { auth, database } from '../config/firebase'
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any'
-        }
-      }
-    ])
+export default function ChatBotScreen() {
+  const [chatMessages, setChatMessages] = useState([])
+
+  useLayoutEffect(() => {
+    const collectionRef = collection(database, 'chats')
+    const q = query(collectionRef, orderBy('createdAt', 'desc'))
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      setChatMessages(
+        querySnapshot.docs
+          .filter((doc) => doc.data().user._id === auth?.currentUser?.email)
+          .map((doc) => ({
+            _id: doc.id,
+            createdAt: doc.data().createdAt.toDate(),
+            text: doc.data().text,
+            user: doc.data().user
+          }))
+      )
+    })
+
+    return () => unsubscribe()
   }, [])
 
   const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
+    setChatMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     )
+
+    const { _id, createdAt, text, user } = messages[0]
+    addDoc(collection(database, 'chats'), { _id, createdAt, text, user })
   }, [])
 
   return (
     <GiftedChat
-      messages={messages}
+      messages={chatMessages}
       onSend={(messages) => onSend(messages)}
       user={{
-        _id: 1
+        _id: auth?.currentUser?.email,
+        avatar: 'https://i.pravatar.cc/300'
       }}
+      showUserAvatar={false}
+      messagesContainerStyle={styles.messageStyle}
     />
   )
 }
+
+const styles = StyleSheet.create({
+  messageStyle: {
+    backgroundColor: '#fff'
+  }
+})

@@ -1,10 +1,18 @@
+import { FontAwesome } from '@expo/vector-icons'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from 'react-native'
 
 import { auth } from '../config/firebase'
+import colors from '../theme/colors'
+
 import ChatBotScreen from '../screens/ChatBotScreen'
 import CreditCardScreen from '../screens/CreditCardScreen'
 import HomeScreen from '../screens/HomeScreen'
@@ -25,11 +33,26 @@ const AuthenticatedUserProvider = ({ children }) => {
 }
 
 function AppStack() {
+  const onSignOut = () => {
+    signOut(auth).catch((error) => console.log(error))
+  }
+
   return (
     <Stack.Navigator
       initialRouteName="CreditCard"
       screenOptions={{
-        headerLeft: () => null
+        headerLeft: () => null,
+        // eslint-disable-next-line react/no-unstable-nested-components
+        headerRight: () => (
+          <TouchableOpacity style={styles.margRight} onPress={onSignOut}>
+            <FontAwesome
+              name="sign-out"
+              size={24}
+              color={colors.gray}
+              style={styles.margRight}
+            />
+          </TouchableOpacity>
+        )
       }}
     >
       <Stack.Screen
@@ -97,5 +120,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  margRight: {
+    marginRight: 10
   }
 })
