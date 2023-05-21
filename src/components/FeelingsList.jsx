@@ -3,7 +3,7 @@ import React from 'react'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useRecoilState } from 'recoil'
 
-import { emotionState } from '../providers/emotionState'
+import { emotionState } from '../providers/dailyState'
 
 export default function FeelingList({ feelings }) {
   const [emotion, setEmotion] = useRecoilState(emotionState)

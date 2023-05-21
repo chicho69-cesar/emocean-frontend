@@ -1,31 +1,25 @@
-import { Heading } from 'native-base'
 import React, { useState } from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 
 import ActionButton from '../components/ActionButton'
 import FeelingList from '../components/FeelingsList'
 import ScreenWrapper from '../components/ScreenWrapper'
+import Title from '../components/Title'
 import colors from '../theme/colors'
 import { feelings } from '../utils/getFeelings'
 
-export default function DailyScreen() {
+export default function DailyScreen({ navigation }) {
   const [feel, setFeel] = useState('')
 
   const onHandleContinue = () => {
-    console.log('continue')
+    navigation.navigate('DailySuggest')
   }
 
   return (
     <ScreenWrapper>
-      <Heading w="100%" textAlign="center" fontSize="lg" color="black" mt={2}>
-        ¿Como te sientes hoy?
-      </Heading>
-
+      <Title text="¿Como te sientes hoy?" mt={2} />
       <FeelingList feelings={feelings} />
-
-      <Heading w="100%" textAlign="center" fontSize="lg" color="black" mt={4}>
-        Escribe tu estado de animo
-      </Heading>
+      <Title text="Escribe tu estado de animo" mt={4} />
 
       <TextInput
         style={styles.input}
