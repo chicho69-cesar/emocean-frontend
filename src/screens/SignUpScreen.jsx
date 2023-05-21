@@ -1,4 +1,5 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import React, { useState } from 'react'
 import {
   Alert,
@@ -10,10 +11,15 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import { auth } from '../config/firebase'
+import { useRecoilState } from 'recoil'
+
+import { auth, database } from '../config/firebase'
+import { userState } from '../providers/userState'
 const backImage = require('../../assets/images/backImage.jpg')
 
 export default function SignUpScreen({ navigation }) {
+  const [, setLoggedUser] = useRecoilState(userState)
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -24,6 +30,31 @@ export default function SignUpScreen({ navigation }) {
         .then((userCredential) => {
           const user = userCredential.user
           console.log('user', user)
+
+          addDoc(collection(database, 'users'), {
+            name: name,
+            email: email,
+            password: password,
+            picture:
+              'https://dio-planner.s3.us-east-2.amazonaws.com/no-image.jpg',
+            premium: false,
+            created_at: serverTimestamp()
+          })
+            .then((docRef) => {
+              setLoggedUser({
+                id: docRef.id,
+                name: name,
+                email: email,
+                picture:
+                  'https://dio-planner.s3.us-east-2.amazonaws.com/no-image.jpg',
+                premium: false
+              })
+              console.log('Document written with ID: ', docRef.id)
+            })
+            .catch((error) => {
+              console.error('Error adding document: ', error)
+              Alert.alert('Error adding document: ', error)
+            })
         })
         .catch((error) => {
           const errorMessage = error.message

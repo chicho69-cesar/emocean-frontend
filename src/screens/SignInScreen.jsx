@@ -1,4 +1,5 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { collection, getDocs } from 'firebase/firestore'
 import React, { useState } from 'react'
 import {
   Alert,
@@ -10,10 +11,15 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import { auth } from '../config/firebase'
+import { useRecoilState } from 'recoil'
+
+import { auth, database } from '../config/firebase'
+import { userState } from '../providers/userState'
 const backImage = require('../../assets/images/backImage.jpg')
 
 export default function SignInScreen({ navigation }) {
+  const [, setLoggedUser] = useRecoilState(userState)
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -23,6 +29,25 @@ export default function SignInScreen({ navigation }) {
         .then((userCredential) => {
           const user = userCredential.user
           console.log('user', user)
+
+          getDocs(collection(database, 'users'))
+            .then((snapshot) => {
+              snapshot.forEach((doc) => {
+                if (doc.data().email === email) {
+                  setLoggedUser({
+                    id: doc.id,
+                    name: doc.data().name,
+                    email: doc.data().email,
+                    picture: doc.data().picture,
+                    premium: doc.data().premium
+                  })
+                  console.log('User logged in')
+                }
+              })
+            })
+            .catch((error) => {
+              console.error(error)
+            })
         })
         .catch((error) => {
           const errorMessage = error.message

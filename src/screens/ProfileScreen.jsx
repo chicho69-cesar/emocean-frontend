@@ -6,18 +6,11 @@ import { useRecoilState } from 'recoil'
 
 import ScreenWrapper from '../components/ScreenWrapper'
 import { headerState } from '../providers/headerState'
-
-const user = {
-  id: 1,
-  name: 'Cesar Villalobos Olmos',
-  email: 'cesarvillalobosolmos.01@gmail.com',
-  picture:
-    'https://i.pinimg.com/564x/2c/4c/67/2c4c67f144c8ed1600be38d06d8d1765.jpg',
-  premium: false
-}
+import { userState } from '../providers/userState'
 
 export default function ProfileScreen({ navigation }) {
   const [, setHeaderShow] = useRecoilState(headerState)
+  const [user] = useRecoilState(userState)
 
   const [phrase, setPhrase] = useState(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
