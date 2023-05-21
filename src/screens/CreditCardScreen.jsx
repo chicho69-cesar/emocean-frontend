@@ -1,5 +1,13 @@
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc
+} from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import {
+  Alert,
   Image,
   SafeAreaView,
   StyleSheet,
@@ -10,10 +18,13 @@ import {
 } from 'react-native'
 import { useRecoilState } from 'recoil'
 
+import { database } from '../config/firebase'
 import { headerState } from '../providers/headerState'
+import { userState } from '../providers/userState'
 const backImage = require('../../assets/images/backImage.jpg')
 
 export default function CreditCardScreen({ navigation }) {
+  const [userLogged, setUserLogged] = useRecoilState(userState)
   const [, setHeaderShow] = useRecoilState(headerState)
 
   const [name, setName] = useState('')
@@ -27,7 +38,34 @@ export default function CreditCardScreen({ navigation }) {
   }, [setHeaderShow])
 
   const onHandleSubmit = () => {
-    console.log('Hola xd')
+    addDoc(collection(database, 'cards'), {
+      name: name,
+      curp: curp,
+      number: number,
+      date: date,
+      cvc: cvc,
+      createdAt: serverTimestamp(),
+      user: userLogged.email
+    })
+      .then((docRef) => {
+        setUserLogged({
+          ...userLogged,
+          premium: true
+        })
+
+        const updatingUser = doc(database, 'users', userLogged.id)
+        updateDoc(updatingUser, {
+          ...userLogged,
+          premium: true
+        }).then(() => {
+          console.log('Document written with ID: ', docRef.id)
+        })
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error)
+        Alert.alert('Error adding document: ', error)
+      })
+
     navigation.push('Profile')
   }
 
