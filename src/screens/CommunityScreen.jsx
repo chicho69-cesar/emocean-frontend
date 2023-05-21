@@ -1,64 +1,45 @@
 import { AntDesign } from '@expo/vector-icons'
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { AspectRatio, HStack, Icon, Image, VStack } from 'native-base'
-import React, { useEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
-import { auth } from '../config/firebase'
-
-const myposts = [
-  {
-    id: 1,
-    user: {
-      email: 'carouwu@gmai.com',
-      name: 'Carolina Carrillo Pedroza',
-      picture:
-        'https://i.pinimg.com/564x/fe/b9/fb/feb9fbf6762b9b59fc8088d6871ccef9.jpg'
-    },
-    text: 'Hola como han estado, pienso que una buena forma de arreglar esos problemas son hablando con personas a las cuales les tengamos mucha confianza',
-    date: new Date('2023-05-01T00:00:00')
-  },
-  {
-    id: 2,
-    user: {
-      email: 'carouwu@gmai.com',
-      name: 'Carolina Carrillo Pedroza',
-      picture:
-        'https://i.pinimg.com/564x/fe/b9/fb/feb9fbf6762b9b59fc8088d6871ccef9.jpg'
-    },
-    text: 'Hola como han estado, pienso que una buena forma de arreglar esos problemas son hablando con personas a las cuales les tengamos mucha confianza',
-    date: new Date('2023-07-01T00:00:00')
-  },
-  {
-    id: 3,
-    user: {
-      email: 'cesarvillalobosolmos.01@gmail.com',
-      name: 'Cesar Villalobos Olmos',
-      picture:
-        'https://i.pinimg.com/564x/2c/4c/67/2c4c67f144c8ed1600be38d06d8d1765.jpg'
-    },
-    text: 'Hola como han estado, pienso que una buena forma de arreglar esos problemas son hablando con personas a las cuales les tengamos mucha confianza',
-    date: new Date('2023-06-01T00:00:00')
-  },
-  {
-    id: 4,
-    user: {
-      email: 'carouwu@gmai.com',
-      name: 'Carolina Carrillo Pedroza',
-      picture:
-        'https://i.pinimg.com/564x/fe/b9/fb/feb9fbf6762b9b59fc8088d6871ccef9.jpg'
-    },
-    text: 'Hola como han estado, pienso que una buena forma de arreglar esos problemas son hablando con personas a las cuales les tengamos mucha confianza',
-    date: new Date('2023-05-01T00:00:00')
-  }
-]
+import { auth, database } from '../config/firebase'
+import { getUser } from '../services/getUser'
 
 export default function CommunityScreen({ navigation }) {
   const [posts, setPosts] = useState([])
 
-  useEffect(() => {
-    setPosts(myposts)
+  useLayoutEffect(() => {
+    const collectionRef = collection(database, 'posts')
+    const q = query(collectionRef, orderBy('createdAt', 'desc'))
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const newPosts = []
+
+      querySnapshot.docs.forEach((doc) => {
+        getUser(doc.data().user).then((res) => {
+          newPosts.push({
+            id: doc.id,
+            date: doc.data().createdAt.toDate(),
+            text: doc.data().text,
+            user: {
+              email: res.email,
+              name: res.name,
+              picture: res.picture
+            }
+          })
+
+          if (newPosts.length === querySnapshot.docs.length) {
+            setPosts(newPosts)
+          }
+        })
+      })
+    })
+
+    return () => unsubscribe()
   }, [])
 
   return (
@@ -129,7 +110,7 @@ export default function CommunityScreen({ navigation }) {
                   <Image
                     rounded="full"
                     resizeMode="cover"
-                    alt={post.user.name}
+                    alt={/* post.user.name */ 'xd'}
                     source={{
                       uri: post.user.picture
                     }}

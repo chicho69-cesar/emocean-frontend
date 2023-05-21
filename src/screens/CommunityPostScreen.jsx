@@ -1,15 +1,30 @@
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import React, { useState } from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { Alert, StyleSheet, TextInput } from 'react-native'
 
 import ActionButton from '../components/ActionButton'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
+import { auth, database } from '../config/firebase'
 import colors from '../theme/colors'
 
 export default function CommunityPostScreen({ navigation }) {
   const [post, setPost] = useState('')
 
   const onHandleSave = () => {
+    addDoc(collection(database, 'posts'), {
+      user: auth.currentUser.email,
+      text: post,
+      createdAt: serverTimestamp()
+    })
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef.id)
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error)
+        Alert.alert('Error adding document: ', error)
+      })
+
     navigation.push('Community')
   }
 
