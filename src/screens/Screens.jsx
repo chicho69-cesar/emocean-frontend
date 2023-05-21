@@ -10,18 +10,20 @@ import ProfileScreen from './ProfileScreen'
 import SignInScreen from './SignInScreen'
 import SignUpScreen from './SignUpScreen'
 import SuggestScreen from './SuggestScreen'
+import WriteScreen from './WriteScreen'
 
 export default {
   ChatBotScreen,
+  CommunityPostScreen,
+  CommunityScreen,
   CreditCardScreen,
-  HomeScreen,
-  DailyWriteScreen,
-  SuggestScreen,
   DailyScreen,
   DailySuggestScreen,
-  CommunityScreen,
-  CommunityPostScreen,
+  DailyWriteScreen,
+  HomeScreen,
   ProfileScreen,
   SignInScreen,
-  SignUpScreen
+  SignUpScreen,
+  SuggestScreen,
+  WriteScreen
 }

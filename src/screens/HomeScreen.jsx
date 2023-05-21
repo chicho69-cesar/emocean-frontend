@@ -1,45 +1,165 @@
-import { Entypo } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
-import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
+import { HStack, Icon } from 'native-base'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
+import ColumnDaily from '../components/ColumnDaily'
 import ScreenWrapper from '../components/ScreenWrapper'
-import colors from '../theme/colors'
+import Title from '../components/Title'
 
-export default function HomeScreen() {
-  const navigation = useNavigation()
+const mywrites = [
+  {
+    id: 1,
+    date: new Date('2023-05-01T00:00:00'),
+    description:
+      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
+    color: '#DDFFC2'
+  },
+  {
+    id: 2,
+    date: new Date('2023-05-01T00:00:00'),
+    description:
+      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
+    color: '#FFC2C2'
+  },
+  {
+    id: 3,
+    date: new Date('2023-05-01T00:00:00'),
+    description:
+      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
+    color: '#FFEAC2'
+  },
+  {
+    id: 4,
+    date: new Date('2023-05-01T00:00:00'),
+    description:
+      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
+    color: '#C2FFD3'
+  },
+  {
+    id: 5,
+    date: new Date('2023-05-01T00:00:00'),
+    description:
+      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
+    color: '#C2FFEC'
+  },
+  {
+    id: 6,
+    date: new Date('2023-06-01T00:00:00'),
+    description:
+      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
+    color: '#FFC2D8'
+  }
+]
+
+export default function HomeScreen({ navigation }) {
+  const [writes, setWrites] = useState([])
+
+  useEffect(() => {
+    setWrites(mywrites)
+  }, [])
 
   return (
     <ScreenWrapper>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('DailyWrite')}
-        style={styles.chatButton}
+      <Title text="¿Necesitas ayuda?" mt={4} />
+
+      <HStack
+        w="100%"
+        justifyContent="center"
+        alignItems="center"
+        space={2}
+        mt={2}
       >
-        <Entypo name="chat" size={24} color={colors.lightGray} />
+        <TouchableOpacity style={[styles.btn, styles.phone]}>
+          <HStack
+            w="100%"
+            justifyContent="center"
+            alignItems="center"
+            space={1}
+          >
+            <Icon
+              color="white"
+              as={MaterialCommunityIcons}
+              name="phone"
+              size="lg"
+              fontWeight="bold"
+            />
+            <Text style={styles.btnText}>Atención</Text>
+          </HStack>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => navigation.navigate('ChatBot')}
+        >
+          <HStack
+            w="100%"
+            justifyContent="center"
+            alignItems="center"
+            space={1}
+          >
+            <Icon
+              color="white"
+              as={MaterialCommunityIcons}
+              name="chat"
+              size="lg"
+              fontWeight="bold"
+            />
+            <Text style={styles.btnText}>Chat</Text>
+          </HStack>
+        </TouchableOpacity>
+      </HStack>
+
+      <Title text="Tú diario" mt={6} />
+
+      <TouchableOpacity
+        style={styles.add}
+        onPress={() => navigation.navigate('DailyWrite')}
+      >
+        <HStack w="100%" justifyContent="center" alignItems="center" space={1}>
+          <Icon
+            color="white"
+            as={AntDesign}
+            name="plus"
+            size="lg"
+            fontWeight="bold"
+          />
+          <Text style={styles.btnText}>Agregar</Text>
+        </HStack>
       </TouchableOpacity>
+
+      <HStack w="100%">
+        <ColumnDaily writes={writes.filter((_, index) => index % 2 === 0)} />
+        <ColumnDaily writes={writes.filter((_, index) => index % 2 !== 0)} />
+      </HStack>
     </ScreenWrapper>
   )
 }
 
 const styles = StyleSheet.create({
-  chatButton: {
-    backgroundColor: colors.primary,
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    alignItems: 'center',
+  btn: {
+    width: 150,
+    backgroundColor: '#0891b2',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10
+  },
+  btnText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  phone: {
+    backgroundColor: '#228B22'
+  },
+  add: {
+    backgroundColor: '#0891b2',
+    marginVertical: 10,
+    marginHorizontal: 120,
     justifyContent: 'center',
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.9,
-    shadowRadius: 8,
-    marginRight: 20,
-    marginBottom: 20
-  },
-  headerLeft: {
-    marginLeft: 15
-  },
-  headerRight: {
-    marginRight: 15
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10
   }
 })
