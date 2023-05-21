@@ -43,6 +43,22 @@ function AuthStack() {
   )
 }
 
+function ProfileStack() {
+  return (
+    <Stack.Navigator
+      initialRouteName="Profile"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Profile" component={Screens.ProfileScreen} />
+      <Stack.Screen
+        name="CreditCard"
+        component={Screens.CreditCardScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  )
+}
+
 function CommunityStack() {
   return (
     <Stack.Navigator
@@ -137,8 +153,8 @@ function BottomNavigator() {
       />
 
       <Tab.Screen
-        name="Profile"
-        component={Screens.ProfileScreen}
+        name="ProfileStack"
+        component={ProfileStack}
         options={{
           tabBarLabel: 'Perfil',
           // eslint-disable-next-line react/no-unstable-nested-components
@@ -159,7 +175,7 @@ function AppStack() {
 
   return (
     <Stack.Navigator
-      initialRouteName="CreditCard"
+      initialRouteName="BottomRoot"
       screenOptions={{
         title: 'Emocean',
         headerLeft: () => null,
@@ -176,12 +192,6 @@ function AppStack() {
         )
       }}
     >
-      <Stack.Screen
-        name="CreditCard"
-        component={Screens.CreditCardScreen}
-        options={{ headerShown: false }}
-      />
-
       <Stack.Screen name="BottomRoot" component={BottomNavigator} />
     </Stack.Navigator>
   )

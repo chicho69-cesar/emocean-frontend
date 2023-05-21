@@ -1,12 +1,48 @@
-import React from 'react'
-import { Text } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, TextInput } from 'react-native'
 
+import ActionButton from '../components/ActionButton'
 import ScreenWrapper from '../components/ScreenWrapper'
+import Title from '../components/Title'
+import colors from '../theme/colors'
 
-export default function CommunityPostScreen() {
+export default function CommunityPostScreen({ navigation }) {
+  const [post, setPost] = useState('')
+
+  const onHandleSave = () => {
+    navigation.push('Community')
+  }
+
   return (
     <ScreenWrapper>
-      <Text>CommunityPostScreen</Text>
+      <Title text="Comenta algo con la comunidad" mt={4} />
+
+      <TextInput
+        style={styles.input}
+        editable
+        multiline
+        numberOfLines={15}
+        placeholder="Escribe algo..."
+        autoCapitalize="none"
+        keyboardType="default"
+        value={post}
+        onChangeText={(text) => setPost(text)}
+      />
+
+      <ActionButton onPress={onHandleSave}>Compartir</ActionButton>
     </ScreenWrapper>
   )
 }
+
+const styles = StyleSheet.create({
+  input: {
+    backgroundColor: colors.lightGray,
+    marginVertical: 20,
+    marginHorizontal: 20,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: colors.gray,
+    borderRadius: 10,
+    padding: 12
+  }
+})

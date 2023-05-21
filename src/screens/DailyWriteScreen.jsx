@@ -15,7 +15,7 @@ export default function DailyWriteScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="Escribe como te sientes" mt={2} />
+      <Title text="Escribe como te sientes" mt={4} />
 
       <TextInput
         style={styles.input}

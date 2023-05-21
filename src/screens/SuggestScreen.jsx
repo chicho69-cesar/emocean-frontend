@@ -19,7 +19,7 @@ export default function SuggestScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="Aquí tienes algunos consejos" mt={2} />
+      <Title text="Aquí tienes algunos consejos" mt={4} />
 
       <View style={styles.textContainer}>
         <Text>{suggests}</Text>

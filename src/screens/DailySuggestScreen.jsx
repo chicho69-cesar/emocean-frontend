@@ -19,7 +19,7 @@ export default function DailySuggestScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="Algunas sugerencias" mt={2} />
+      <Title text="Algunas sugerencias" mt={4} />
 
       <View style={styles.textContainer}>
         <Text>{suggests}</Text>

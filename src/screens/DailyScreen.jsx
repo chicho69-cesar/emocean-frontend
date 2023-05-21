@@ -17,7 +17,7 @@ export default function DailyScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="¿Como te sientes hoy?" mt={2} />
+      <Title text="¿Como te sientes hoy?" mt={4} />
       <FeelingList feelings={feelings} />
       <Title text="Escribe tu estado de animo" mt={4} />
 
