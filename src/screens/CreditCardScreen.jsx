@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Image,
   SafeAreaView,
@@ -8,18 +8,27 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
+import { useRecoilState } from 'recoil'
+
+import { headerState } from '../providers/headerState'
 const backImage = require('../../assets/images/backImage.jpg')
 
 export default function CreditCardScreen({ navigation }) {
+  const [, setHeaderShow] = useRecoilState(headerState)
+
   const [name, setName] = useState('')
   const [curp, setCurp] = useState('')
   const [number, setNumber] = useState('')
   const [date, setDate] = useState('')
   const [cvc, setCvc] = useState('')
 
+  useEffect(() => {
+    setHeaderShow(false)
+  }, [setHeaderShow])
+
   const onHandleSubmit = () => {
     console.log('Hola xd')
-    navigation.navigate('BottomRoot')
+    navigation.push('Profile')
   }
 
   return (

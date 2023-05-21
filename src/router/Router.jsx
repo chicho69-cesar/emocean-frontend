@@ -14,6 +14,8 @@ import {
 import { auth } from '../config/firebase'
 import colors from '../theme/colors'
 
+import { useRecoilState } from 'recoil'
+import { headerState } from '../providers/headerState'
 import Screens from '../screens/Screens'
 
 const Stack = createStackNavigator()
@@ -169,6 +171,8 @@ function BottomNavigator() {
 }
 
 function AppStack() {
+  const [headerShow] = useRecoilState(headerState)
+
   const onSignOut = () => {
     signOut(auth).catch((error) => console.log(error))
   }
@@ -177,6 +181,7 @@ function AppStack() {
     <Stack.Navigator
       initialRouteName="BottomRoot"
       screenOptions={{
+        headerShown: headerShow,
         title: 'Emocean',
         headerLeft: () => null,
         // eslint-disable-next-line react/no-unstable-nested-components
