@@ -1,3 +1,4 @@
+import CallsScreen from './CallsScreen'
 import ChatBotScreen from './ChatBotScreen'
 import CommunityPostScreen from './CommunityPostScreen'
 import CommunityScreen from './CommunityScreen'
@@ -13,6 +14,7 @@ import SuggestScreen from './SuggestScreen'
 import WriteScreen from './WriteScreen'
 
 export default {
+  CallsScreen,
   ChatBotScreen,
   CommunityPostScreen,
   CommunityScreen,

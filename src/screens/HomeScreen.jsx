@@ -70,7 +70,10 @@ export default function HomeScreen({ navigation }) {
         space={2}
         mt={2}
       >
-        <TouchableOpacity style={[styles.btn, styles.phone]}>
+        <TouchableOpacity
+          style={[styles.btn, styles.phone]}
+          onPress={() => navigation.navigate('Calls')}
+        >
           <HStack
             w="100%"
             justifyContent="center"

@@ -3,7 +3,7 @@ import { VStack } from 'native-base'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
-import { getTextDate } from '../utils/getTextDate'
+import { getTextCompleteDate, getTextDate } from '../utils/getTextDate'
 
 export default function ColumnDaily({ writes }) {
   const navigation = useNavigation()
@@ -17,7 +17,7 @@ export default function ColumnDaily({ writes }) {
           onPress={() =>
             navigation.navigate('Write', {
               ...write,
-              date: getTextDate(write.date)
+              date: getTextCompleteDate(write.date)
             })
           }
         >

@@ -102,6 +102,7 @@ function HomeStack() {
       <Stack.Screen name="Suggest" component={Screens.SuggestScreen} />
       <Stack.Screen name="ChatBot" component={Screens.ChatBotScreen} />
       <Stack.Screen name="Write" component={Screens.WriteScreen} />
+      <Stack.Screen name="Calls" component={Screens.CallsScreen} />
     </Stack.Navigator>
   )
 }

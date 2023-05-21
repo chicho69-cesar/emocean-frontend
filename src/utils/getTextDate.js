@@ -26,3 +26,41 @@ export const getTextDate = (date) => {
 
   return textDate
 }
+
+export const getTextCompleteDate = (date) => {
+  const days = [
+    'Domingo',
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado'
+  ]
+
+  const months = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
+  ]
+
+  let textDate =
+    days[date.getDay()] +
+    ' ' +
+    date.getDate() +
+    ' de ' +
+    months[date.getMonth()] +
+    ' del ' +
+    date.getFullYear()
+
+  return textDate
+}

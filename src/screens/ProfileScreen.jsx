@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   premiumText: {
     textAlign: 'center',
     fontSize: 16,
-    fontWeight: 'semibold',
+    fontWeight: '800',
     color: '#303030'
   },
   quote: {
