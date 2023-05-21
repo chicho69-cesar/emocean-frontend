@@ -12,7 +12,7 @@ export default function HomeScreen() {
   return (
     <ScreenWrapper>
       <TouchableOpacity
-        onPress={() => navigation.navigate('ChatBot')}
+        onPress={() => navigation.navigate('DailyWrite')}
         style={styles.chatButton}
       >
         <Entypo name="chat" size={24} color={colors.lightGray} />
