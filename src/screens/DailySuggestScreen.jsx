@@ -1,17 +1,39 @@
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
+import { useRecoilState } from 'recoil'
 
 import ActionButton from '../components/ActionButton'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
+import { SERVER_LINK } from '../constants/server'
+import { emotionState, feelState } from '../providers/dailyState'
 import colors from '../theme/colors'
 
 export default function DailySuggestScreen({ navigation }) {
+  const [emotion] = useRecoilState(emotionState)
+  const [feeling] = useRecoilState(feelState)
+
   const [suggests, setSuggests] = useState('')
 
   useEffect(() => {
-    setSuggests('')
-  }, [])
+    const getSuggests = async () => {
+      try {
+        const response = await axios.post(`${SERVER_LINK}/api/feeling`, {
+          prompt: `Me siento con ${emotion}. ${feeling}. Dame algunos consejos por favor`
+        })
+
+        const responseMessage = response.data.message.content
+        setSuggests(responseMessage)
+      } catch (error) {
+        console.error('Error on get suggestions: ', error)
+        Alert.alert('Error on get suggestions: ', error)
+        setSuggests('No he podido encontrar sugerencias para ti')
+      }
+    }
+
+    getSuggests()
+  }, [emotion, feeling])
 
   const onHandleContinue = () => {
     navigation.navigate('HomeStack')

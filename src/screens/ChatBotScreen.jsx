@@ -9,8 +9,8 @@ import {
 import React, { useCallback, useLayoutEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
-
 import { useRecoilState } from 'recoil'
+
 import { auth, database } from '../config/firebase'
 import { SERVER_LINK } from '../constants/server'
 import { userState } from '../providers/userState'

@@ -1,17 +1,42 @@
-import React, { useState } from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
+import { Alert, StyleSheet, TextInput } from 'react-native'
+import { useRecoilState } from 'recoil'
 
 import ActionButton from '../components/ActionButton'
 import FeelingList from '../components/FeelingsList'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
+import { auth, database } from '../config/firebase'
+import { emotionState, feelState } from '../providers/dailyState'
 import colors from '../theme/colors'
 import { feelings } from '../utils/getFeelings'
 
 export default function DailyScreen({ navigation }) {
+  const [emotion] = useRecoilState(emotionState)
+  const [, setFeeling] = useRecoilState(feelState)
+
   const [feel, setFeel] = useState('')
 
+  useEffect(() => {
+    setFeeling(feel)
+  }, [setFeeling, feel])
+
   const onHandleContinue = () => {
+    addDoc(collection(database, 'feelings'), {
+      user: auth.currentUser.email,
+      text: feel,
+      feeling: emotion,
+      createdAt: serverTimestamp()
+    })
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef.id)
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error)
+        Alert.alert('Error adding document: ', error)
+      })
+
     navigation.navigate('DailySuggest')
   }
 
