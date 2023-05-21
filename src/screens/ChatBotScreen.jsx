@@ -1,3 +1,4 @@
+import axios from 'axios'
 import {
   addDoc,
   collection,
@@ -9,9 +10,13 @@ import React, { useCallback, useLayoutEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 
+import { useRecoilState } from 'recoil'
 import { auth, database } from '../config/firebase'
+import { SERVER_LINK } from '../constants/server'
+import { userState } from '../providers/userState'
 
 export default function ChatBotScreen() {
+  const [userLogged] = useRecoilState(userState)
   const [chatMessages, setChatMessages] = useState([])
 
   useLayoutEffect(() => {
@@ -21,7 +26,11 @@ export default function ChatBotScreen() {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       setChatMessages(
         querySnapshot.docs
-          .filter((doc) => doc.data().user._id === auth?.currentUser?.email)
+          .filter(
+            (doc) =>
+              doc.data().user._id === auth?.currentUser?.email ||
+              doc.data().user._id === `${auth?.currentUser?.email}-chat`
+          )
           .map((doc) => ({
             _id: doc.id,
             createdAt: doc.data().createdAt.toDate(),
@@ -34,14 +43,57 @@ export default function ChatBotScreen() {
     return () => unsubscribe()
   }, [])
 
-  const onSend = useCallback((messages = []) => {
-    setChatMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
-    )
+  const onSend = useCallback(
+    async (messages = []) => {
+      const { _id, createdAt, text, user } = messages[0]
 
-    const { _id, createdAt, text, user } = messages[0]
-    addDoc(collection(database, 'chats'), { _id, createdAt, text, user })
-  }, [])
+      // Realizar la petición HTTP POST
+      try {
+        const response = await axios.post(`${SERVER_LINK}/api/chatgpt`, {
+          prompt: text
+        })
+
+        // Obtener el mensaje de respuesta de la petición
+        const responseMessage = response.data.message.content
+
+        // Agregar el mensaje de respuesta al arreglo de mensajes del chat
+        const updatedMessages = [
+          {
+            _id: Math.random().toString(),
+            createdAt: new Date(new Date().getTime() + 10000),
+            text: responseMessage,
+            user: {
+              _id: `${auth?.currentUser?.email}-chat`,
+              avatar: userLogged.picture
+            }
+          },
+          ...messages
+        ]
+
+        setChatMessages(updatedMessages)
+
+        // Guardar el mensaje enviado y la respuesta en la colección chats de Firebase
+        addDoc(collection(database, 'chats'), {
+          _id,
+          createdAt,
+          text,
+          user
+        })
+        addDoc(collection(database, 'chats'), {
+          _id: Math.random().toString(),
+          createdAt: new Date(new Date().getTime() + 10000),
+          text: responseMessage,
+          user: {
+            _id: `${auth?.currentUser?.email}-chat`,
+            avatar: userLogged.picture
+          }
+        })
+      } catch (error) {
+        console.error('Error al enviar el mensaje:', error)
+      }
+    },
+    [userLogged]
+  )
 
   return (
     <GiftedChat
