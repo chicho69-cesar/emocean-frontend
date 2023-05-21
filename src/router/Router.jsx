@@ -89,7 +89,10 @@ function HomeStack() {
 
 function BottomNavigator() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="DailyStack"
+    >
       <Tab.Screen
         name="HomeStack"
         component={HomeStack}

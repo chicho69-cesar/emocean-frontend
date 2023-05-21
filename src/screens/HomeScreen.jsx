@@ -1,31 +1,27 @@
 import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+
+import ScreenWrapper from '../components/ScreenWrapper'
 import colors from '../theme/colors'
 
 export default function HomeScreen() {
   const navigation = useNavigation()
 
   return (
-    <View style={styles.container}>
+    <ScreenWrapper>
       <TouchableOpacity
         onPress={() => navigation.navigate('ChatBot')}
         style={styles.chatButton}
       >
         <Entypo name="chat" size={24} color={colors.lightGray} />
       </TouchableOpacity>
-    </View>
+    </ScreenWrapper>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    backgroundColor: '#fff'
-  },
   chatButton: {
     backgroundColor: colors.primary,
     height: 50,

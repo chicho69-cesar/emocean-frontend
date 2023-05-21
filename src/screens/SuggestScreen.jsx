@@ -1,10 +1,12 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
+
+import ScreenWrapper from '../components/ScreenWrapper'
 
 export default function SuggestScreen() {
   return (
-    <View>
+    <ScreenWrapper>
       <Text>SuggestScreen</Text>
-    </View>
+    </ScreenWrapper>
   )
 }
