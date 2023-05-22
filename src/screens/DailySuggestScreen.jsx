@@ -44,7 +44,7 @@ export default function DailySuggestScreen({ navigation }) {
       <Title text="Algunas sugerencias" mt={4} />
 
       <View style={styles.textContainer}>
-        <Text>{suggests}</Text>
+        <Text style={styles.text}>{suggests}</Text>
       </View>
 
       <ActionButton onPress={onHandleContinue}>Continuar a la app</ActionButton>
@@ -63,5 +63,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 8
+  },
+  text: {
+    fontSize: 16,
+    color: '#303030'
   }
 })

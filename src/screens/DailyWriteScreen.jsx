@@ -1,15 +1,39 @@
-import React, { useState } from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
+import { Alert, StyleSheet, TextInput } from 'react-native'
 
+import { useRecoilState } from 'recoil'
 import ActionButton from '../components/ActionButton'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
+import { auth, database } from '../config/firebase'
+import { suggestState } from '../providers/suggestState'
 import colors from '../theme/colors'
+import getRandomColor from '../utils/getRandomColor'
 
 export default function DailyWriteScreen({ navigation }) {
+  const [, setSuggest] = useRecoilState(suggestState)
   const [dailyText, setDailyText] = useState('')
 
+  useEffect(() => {
+    setSuggest(dailyText)
+  }, [dailyText, setSuggest])
+
   const onHandleSave = () => {
+    addDoc(collection(database, 'dailies'), {
+      user: auth.currentUser.email,
+      text: dailyText,
+      color: getRandomColor(),
+      createdAt: serverTimestamp()
+    })
+      .then((docRef) => {
+        console.log('Document written with ID: ', docRef.id)
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error)
+        Alert.alert('Error adding document: ', error)
+      })
+
     navigation.navigate('Suggest')
   }
 

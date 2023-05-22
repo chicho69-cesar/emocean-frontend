@@ -10,7 +10,7 @@ const s3 = new S3({
 export const uploadImage = async (uri, type, name) => {
   const response = await fetch(uri)
   const blob = await response.blob()
-  const fileNameInBucket = `images/${Date.now().toString()}-${name}`
+  const fileNameInBucket = `emocean/${Date.now().toString()}-${name}`
 
   const options = {
     Bucket: 'dio-planner',

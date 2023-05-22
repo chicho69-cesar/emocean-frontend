@@ -1,62 +1,42 @@
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { HStack, Icon } from 'native-base'
-import React, { useEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import ColumnDaily from '../components/ColumnDaily'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
-
-const mywrites = [
-  {
-    id: 1,
-    date: new Date('2023-05-01T00:00:00'),
-    description:
-      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
-    color: '#DDFFC2'
-  },
-  {
-    id: 2,
-    date: new Date('2023-05-01T00:00:00'),
-    description:
-      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
-    color: '#FFC2C2'
-  },
-  {
-    id: 3,
-    date: new Date('2023-05-01T00:00:00'),
-    description:
-      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
-    color: '#FFEAC2'
-  },
-  {
-    id: 4,
-    date: new Date('2023-05-01T00:00:00'),
-    description:
-      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
-    color: '#C2FFD3'
-  },
-  {
-    id: 5,
-    date: new Date('2023-05-01T00:00:00'),
-    description:
-      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
-    color: '#C2FFEC'
-  },
-  {
-    id: 6,
-    date: new Date('2023-06-01T00:00:00'),
-    description:
-      'Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi. Ad deserunt laborum non occaecat anim sunt laborum reprehenderit do nisi.',
-    color: '#FFC2D8'
-  }
-]
+import { auth, database } from '../config/firebase'
 
 export default function HomeScreen({ navigation }) {
   const [writes, setWrites] = useState([])
 
-  useEffect(() => {
-    setWrites(mywrites)
+  useLayoutEffect(() => {
+    const collectionRef = collection(database, 'dailies')
+    const q = query(collectionRef, orderBy('createdAt', 'desc'))
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      setWrites(
+        querySnapshot.docs
+          .filter((doc) => doc.data().user === auth?.currentUser?.email)
+          .map((doc) => {
+            const date = doc.data().createdAt
+              ? doc.data().createdAt.toDate()
+              : new Date()
+
+            return {
+              id: doc.id,
+              date: date,
+              description: doc.data().text,
+              color: doc.data().color,
+              user: doc.data().user
+            }
+          })
+      )
+    })
+
+    return () => unsubscribe()
   }, [])
 
   return (
