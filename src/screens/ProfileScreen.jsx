@@ -1,24 +1,67 @@
 import { FontAwesome } from '@expo/vector-icons'
+import * as ImagePicker from 'expo-image-picker'
+import { doc, updateDoc } from 'firebase/firestore'
 import { AspectRatio, HStack, Image } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useRecoilState } from 'recoil'
 
 import ScreenWrapper from '../components/ScreenWrapper'
+import { database } from '../config/firebase'
 import { headerState } from '../providers/headerState'
 import { userState } from '../providers/userState'
+import { uploadImage } from '../utils/uploadImage'
 
 export default function ProfileScreen({ navigation }) {
   const [, setHeaderShow] = useRecoilState(headerState)
-  const [user] = useRecoilState(userState)
+  const [user, setUser] = useRecoilState(userState)
 
-  const [phrase, setPhrase] = useState(
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-  )
+  const [image, setImage] = useState(null)
+  const [imageFileName, setImageFileName] = useState(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [phrase, setPhrase] = useState('')
 
   useEffect(() => {
     setHeaderShow(true)
   }, [setHeaderShow])
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1
+    })
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri)
+      setImageFileName(result.assets[0].fileName)
+    }
+  }
+
+  const onChangeImage = () => {
+    setIsEditing(true)
+    pickImage()
+  }
+
+  const onHandleEdit = async () => {
+    let response = 'https://dio-planner.s3.us-east-2.amazonaws.com/no-image.jpg'
+    const uri = image
+    const type = 'image/jpeg'
+    const file = imageFileName || 'image.jpg'
+
+    if (image) {
+      response = await uploadImage(uri, type, file)
+
+      const updatingUser = doc(database, 'users', user.id)
+      await updateDoc(updatingUser, {
+        ...user,
+        picture: response
+      })
+
+      setUser({ ...user, picture: response })
+      setIsEditing(false)
+    }
+  }
 
   return (
     <ScreenWrapper>
@@ -51,7 +94,7 @@ export default function ProfileScreen({ navigation }) {
         space={4}
         mt={3}
       >
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity style={styles.editButton} onPress={onChangeImage}>
           <FontAwesome name="pencil" color="#888" size={24} />
         </TouchableOpacity>
 
@@ -66,6 +109,12 @@ export default function ProfileScreen({ navigation }) {
           </Text>
         </View>
       </HStack>
+
+      {isEditing && (
+        <TouchableOpacity style={styles.save} onPress={onHandleEdit}>
+          <Text style={styles.saveText}>Guardar</Text>
+        </TouchableOpacity>
+      )}
 
       <Text style={styles.text}>{user.name}</Text>
       <Text style={styles.email}>{user.email}</Text>
@@ -144,5 +193,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#303030',
     fontStyle: 'italic'
+  },
+  save: {
+    marginTop: 15,
+    marginHorizontal: 80,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    backgroundColor: '#353535',
+    elevation: 1
+  },
+  saveText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#f1f1f1'
   }
 })
