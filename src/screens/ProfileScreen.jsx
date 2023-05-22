@@ -10,6 +10,7 @@ import ScreenWrapper from '../components/ScreenWrapper'
 import { database } from '../config/firebase'
 import { headerState } from '../providers/headerState'
 import { userState } from '../providers/userState'
+import { getPhrase } from '../utils/getPhrase'
 import { uploadImage } from '../utils/uploadImage'
 
 export default function ProfileScreen({ navigation }) {
@@ -24,6 +25,10 @@ export default function ProfileScreen({ navigation }) {
   useEffect(() => {
     setHeaderShow(true)
   }, [setHeaderShow])
+
+  useEffect(() => {
+    setPhrase(getPhrase())
+  }, [])
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

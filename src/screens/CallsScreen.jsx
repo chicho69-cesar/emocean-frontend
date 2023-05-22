@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { AspectRatio, HStack, Image } from 'native-base'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Linking, StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
@@ -10,7 +10,7 @@ const docs = [
   {
     id: 1,
     name: 'Carolina Carrillo Pedroza',
-    phone: '3461005286',
+    phone: '+523461099207',
     picture:
       'https://i.pinimg.com/564x/fe/b9/fb/feb9fbf6762b9b59fc8088d6871ccef9.jpg',
     active: false
@@ -18,7 +18,7 @@ const docs = [
   {
     id: 2,
     name: 'Cesar Villalobos Olmos',
-    phone: '3461099207',
+    phone: '+523461005286',
     picture:
       'https://i.pinimg.com/564x/2c/4c/67/2c4c67f144c8ed1600be38d06d8d1765.jpg',
     active: true
@@ -26,6 +26,10 @@ const docs = [
 ]
 
 export default function CallsScreen({ navigation }) {
+  const handleCall = (phone) => {
+    Linking.openURL(`tel:${phone}`)
+  }
+
   return (
     <ScreenWrapper>
       <Title text="¿Te sientes mal?, marcános" mt={4} />
@@ -72,7 +76,10 @@ export default function CallsScreen({ navigation }) {
             </HStack>
 
             <HStack w="20%" justifyContent="center">
-              <TouchableOpacity style={styles.call}>
+              <TouchableOpacity
+                style={styles.call}
+                onPress={() => handleCall(doc.phone)}
+              >
                 <MaterialCommunityIcons name="phone" size={24} color="white" />
               </TouchableOpacity>
             </HStack>
