@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
 import { VStack } from 'native-base'
-import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import { getTextCompleteDate, getTextDate } from '../utils/getTextDate'

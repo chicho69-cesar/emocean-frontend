@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { AspectRatio, HStack, Image } from 'native-base'
-import React from 'react'
 import { Linking, StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import ScreenWrapper from '../components/ScreenWrapper'

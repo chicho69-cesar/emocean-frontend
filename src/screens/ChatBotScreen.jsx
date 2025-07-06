@@ -6,7 +6,7 @@ import {
   orderBy,
   query
 } from 'firebase/firestore'
-import React, { useCallback, useLayoutEffect, useState } from 'react'
+import { useCallback, useLayoutEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import { useRecoilState } from 'recoil'

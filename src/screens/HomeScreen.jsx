@@ -1,7 +1,7 @@
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { HStack, Icon } from 'native-base'
-import React, { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import ColumnDaily from '../components/ColumnDaily'

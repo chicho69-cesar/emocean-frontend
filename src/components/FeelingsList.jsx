@@ -1,5 +1,4 @@
 import { Heading, Text, VStack } from 'native-base'
-import React from 'react'
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useRecoilState } from 'recoil'
 

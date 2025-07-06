@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Alert,
   Image,

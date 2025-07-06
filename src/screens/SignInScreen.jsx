@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { collection, getDocs } from 'firebase/firestore'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Alert,
   Image,

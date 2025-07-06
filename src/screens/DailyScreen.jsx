@@ -1,5 +1,5 @@
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert, StyleSheet, TextInput } from 'react-native'
 import { useRecoilState } from 'recoil'
 

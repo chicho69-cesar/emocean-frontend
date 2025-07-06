@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { AspectRatio, HStack, Icon, Image, VStack } from 'native-base'
-import React, { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 import ScreenWrapper from '../components/ScreenWrapper'

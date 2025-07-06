@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { useRecoilState } from 'recoil'
 

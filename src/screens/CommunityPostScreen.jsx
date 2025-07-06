@@ -1,5 +1,5 @@
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Alert, StyleSheet, TextInput } from 'react-native'
 
 import ActionButton from '../components/ActionButton'

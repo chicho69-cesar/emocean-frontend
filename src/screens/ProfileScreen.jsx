@@ -2,7 +2,7 @@ import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { doc, updateDoc } from 'firebase/firestore'
 import { AspectRatio, HStack, Image } from 'native-base'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useRecoilState } from 'recoil'
 
