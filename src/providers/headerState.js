@@ -1,6 +1,7 @@
-import { atom } from 'recoil'
+import { create } from 'zustand'
 
-export const headerState = atom({
-  key: 'headerState',
-  default: true
-})
+export const useHeaderState = create((set) => ({
+  headerVisible: true,
+  setHeaderVisible: (visible) => set({ headerVisible: visible }),
+  toggleHeaderVisible: () => set((state) => ({ headerVisible: !state.headerVisible })),
+}))

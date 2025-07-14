@@ -1,11 +1,11 @@
-import { atom } from 'recoil'
+import { create } from 'zustand'
 
-export const emotionState = atom({
-  key: 'emotionState',
-  default: ''
-})
+export const useEmotionState = create((set) => ({
+  emotion: '',
+  setEmotion: (emotion) => set({ emotion }),
+}))
 
-export const feelState = atom({
-  key: 'feelState',
-  default: ''
-})
+export const useFeelState = create((set) => ({
+  feel: '',
+  setFeel: (feel) => set({ feel }),
+}))

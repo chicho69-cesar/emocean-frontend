@@ -1,6 +1,8 @@
-import { atom } from 'recoil'
+import { create } from 'zustand'
 
-export const suggestState = atom({
-  key: 'suggestState',
-  default: ''
-})
+export const useSuggestState = create((set) => ({
+  suggest: '',
+  write: {},
+  setSuggest: (suggest) => set({ suggest }),
+  setWrite: (write) => set({ write })
+}))
