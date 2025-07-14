@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { VStack } from 'native-base'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { getTextCompleteDate, getTextDate } from '../utils/getTextDate'
 
@@ -8,7 +7,7 @@ export default function ColumnDaily({ writes }) {
   const navigation = useNavigation()
 
   return (
-    <VStack w="50%" p={2}>
+    <View style={styles.container}>
       {writes.map((write) => (
         <TouchableOpacity
           style={[{ backgroundColor: write.color }, styles.write]}
@@ -20,30 +19,37 @@ export default function ColumnDaily({ writes }) {
             })
           }
         >
-          <Text style={styles.date}>{getTextDate(write.date)}</Text>
+          <Text style={styles.date}>
+            {getTextDate(write.date)}
+          </Text>
+
           <Text style={styles.text} numberOfLines={8}>
             {write.description}
           </Text>
         </TouchableOpacity>
       ))}
-    </VStack>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    width: '50%',
+    padding: 6,
+  },
   write: {
     marginBottom: 20,
     padding: 10,
     borderRadius: 10,
-    elevation: 1
+    elevation: 1,
   },
   date: {
     fontSize: 10,
     color: '#101010',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   text: {
     fontSize: 16,
-    color: '#202020'
-  }
+    color: '#202020',
+  },
 })

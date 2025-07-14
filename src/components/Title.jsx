@@ -1,9 +1,18 @@
-import { Heading } from 'native-base'
+import { StyleSheet, Text, View } from 'react-native'
 
 export default function Title({ text, mt }) {
   return (
-    <Heading w="100%" textAlign="center" fontSize="lg" color="black" mt={mt}>
-      {text}
-    </Heading>
+    <View style={{ width: '100%', marginTop: mt || 0 }}>
+      <Text style={styles.title}>{text}</Text>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000000',
+    textAlign: 'center',
+  },
+})

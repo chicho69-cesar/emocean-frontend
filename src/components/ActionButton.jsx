@@ -1,11 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Pressable, StyleSheet, Text } from 'react-native'
 import colors from '../theme/colors'
 
 export default function ActionButton({ children, onPress }) {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <Pressable style={styles.button} onPress={onPress}>
       <Text style={styles.textButton}>{children}</Text>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 

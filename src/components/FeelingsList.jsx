@@ -1,11 +1,9 @@
-import { Heading, Text, VStack } from 'native-base'
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { useRecoilState } from 'recoil'
-
-import { emotionState } from '../providers/dailyState'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useEmotionState } from '../providers/dailyState'
 
 export default function FeelingList({ feelings }) {
-  const [emotion, setEmotion] = useRecoilState(emotionState)
+  const emotion = useEmotionState((state) => state.emotion)
+  const setEmotion = useEmotionState((state) => state.setEmotion)
 
   return (
     <View style={styles.container}>
@@ -14,40 +12,37 @@ export default function FeelingList({ feelings }) {
         horizontal
         style={styles.scroll}
       >
-        {feelings.map((feeling) => {
-          return (
-            <TouchableOpacity
-              key={feeling.id}
-              style={styles.card}
-              onPress={() => setEmotion(feeling.name)}
+        {feelings.map((feeling) => (
+          <TouchableOpacity
+            key={feeling.id}
+            style={styles.card}
+            onPress={() => setEmotion(feeling.name)}
+          >
+            <View
+              style={[
+                styles.cardContent,
+                {
+                  backgroundColor: feeling.name === emotion ? '#1e90ff' : '#ffffff',
+                  borderWidth: 1,
+                  borderColor: feeling.name === emotion ? '#ffffff' : '#d1d5db',
+                },
+              ]}
             >
-              <VStack
-                w="100%"
-                px={3}
-                py={4}
-                bg={feeling.name === emotion ? 'tahiti.600' : 'white'}
-                borderWidth={1}
-                borderColor={
-                  feeling.name === emotion ? 'white' : 'coolGray.300'
-                }
-                rounded="lg"
-              >
-                <Heading w="100%" size="3xl" textAlign="center">
-                  {feeling.emoji}
-                </Heading>
+              <Text style={styles.emoji}>
+                {feeling.emoji}
+              </Text>
 
-                <Text
-                  w="100%"
-                  textAlign="center"
-                  fontWeight="semibold"
-                  color={feeling.name === emotion ? 'white' : 'black'}
-                >
-                  {feeling.name}
-                </Text>
-              </VStack>
-            </TouchableOpacity>
-          )
-        })}
+              <Text
+                style={[
+                  styles.name,
+                  { color: feeling.name === emotion ? '#ffffff' : '#000000' },
+                ]}
+              >
+                {feeling.name}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </View>
   )
@@ -57,13 +52,30 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 5,
     marginTop: 10,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   scroll: {
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   card: {
     marginHorizontal: 10,
-    width: 120
-  }
+    width: 120,
+  },
+  cardContent: {
+    width: '100%',
+    paddingHorizontal: 12,
+    paddingVertical: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  emoji: {
+    fontSize: 32,
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
 })
