@@ -1,28 +1,44 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Alert, StyleSheet, Text, View } from 'react-native'
-import { useRecoilState } from 'recoil'
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native'
 
+import { doc, updateDoc } from 'firebase/firestore'
 import ActionButton from '../components/ActionButton'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
+import { database } from '../config/firebase'
 import { SERVER_LINK } from '../constants/server'
-import { suggestState } from '../providers/suggestState'
+import { useSuggestState } from '../providers/suggestState'
 import colors from '../theme/colors'
 
 export default function SuggestScreen({ navigation }) {
-  const [dailySuggests] = useRecoilState(suggestState)
+  const dailySuggests = useSuggestState((state) => state.suggest)
+  const write = useSuggestState((state) => state.write)
+
   const [suggests, setSuggests] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const getSuggests = async () => {
       try {
+        setLoading(true)
+
         const response = await axios.post(`${SERVER_LINK}/api/daily`, {
           prompt: dailySuggests
         })
 
         const responseMessage = response.data.message.content
+
+        if (write.id) {
+          const docRef = doc(database, 'dailies', write.id)
+          
+          await updateDoc(docRef, {
+            write: responseMessage
+          })
+        }
+
         setSuggests(responseMessage)
+        setLoading(false)
       } catch (error) {
         console.error('Error on get suggestions: ', error)
         Alert.alert('Error on get suggestions: ', error)
@@ -31,7 +47,7 @@ export default function SuggestScreen({ navigation }) {
     }
 
     getSuggests()
-  }, [dailySuggests])
+  }, [dailySuggests, write])
 
   const onHandleContinue = () => {
     navigation.navigate('Home')
@@ -39,10 +55,16 @@ export default function SuggestScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="Aquí tienes algunos consejos" mt={4} />
+      <Title text='Aquí tienes algunos consejos' mt={4} />
 
       <View style={styles.textContainer}>
-        <Text style={styles.text}>{suggests}</Text>
+        {loading ? (
+          <View style={{ alignItems: 'center', justifyContent: 'center', height: 60 }}>
+            <ActivityIndicator size="large" color={colors.primary} />
+          </View>
+        ) : (
+          <Text style={styles.text}>{suggests}</Text>
+        )}
       </View>
 
       <ActionButton onPress={onHandleContinue}>Continuar</ActionButton>

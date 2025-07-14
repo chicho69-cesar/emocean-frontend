@@ -1,8 +1,7 @@
 import { AntDesign } from '@expo/vector-icons'
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
-import { AspectRatio, HStack, Icon, Image, VStack } from 'native-base'
 import { useLayoutEffect, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
@@ -28,8 +27,8 @@ export default function CommunityScreen({ navigation }) {
             user: {
               email: res.email,
               name: res.name,
-              picture: res.picture
-            }
+              picture: res.picture,
+            },
           })
 
           if (newPosts.length === querySnapshot.docs.length) {
@@ -44,103 +43,63 @@ export default function CommunityScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="Posts mas recientes" mt={4} />
+      <Title text='Posts mas recientes' mt={4} />
 
       <TouchableOpacity
         style={styles.add}
         onPress={() => navigation.navigate('CommunityPost')}
       >
-        <HStack w="100%" justifyContent="center" alignItems="center" space={1}>
-          <Icon
-            color="white"
-            as={AntDesign}
-            name="plus"
-            size="lg"
-            fontWeight="bold"
-          />
+        <View style={styles.buttonContent}>
+          <AntDesign name='plus' size={24} color='white' />
           <Text style={styles.btnText}>Comparte algo</Text>
-        </HStack>
+        </View>
       </TouchableOpacity>
 
       {posts
         .sort((a, b) => b.date - a.date)
         .map((post) => (
-          <HStack key={post.id} w="100%" my={2} justifyContent="center">
-            <VStack
-              w="90%"
-              justifyContent="flex-start"
-              alignItems="center"
-              bg={
-                post.user.email === auth?.currentUser?.email
-                  ? 'tahiti.600'
-                  : 'coolGray.100'
-              }
-              borderWidth={1}
-              borderColor={
-                post.user.email === auth?.currentUser?.email
-                  ? 'coolGray.100'
-                  : 'coolGray.400'
-              }
-              rounded="lg"
-              p={2}
+          <View key={post.id} style={styles.postContainer}>
+            <View
+              style={[
+                styles.post,
+                {
+                  backgroundColor:
+                    post.user.email === auth?.currentUser?.email ? '#1e90ff' : '#f3f4f6',
+                  borderWidth: 1,
+                  borderColor:
+                    post.user.email === auth?.currentUser?.email ? '#f3f4f6' : '#9ca3af',
+                },
+              ]}
             >
-              <HStack
-                w="100%"
-                justifyContent="flex-start"
-                alignItems="center"
-                pb={2}
-                space={2}
-                borderBottomWidth={1}
-                borderBottomColor={
-                  post.user.email === auth?.currentUser?.email
-                    ? 'coolGray.100'
-                    : 'coolGray.400'
-                }
-              >
-                <AspectRatio
-                  ratio={{
-                    base: 1 / 1,
-                    md: 1 / 1
-                  }}
-                  height={{
-                    base: 45,
-                    md: 45
-                  }}
-                >
-                  <Image
-                    rounded="full"
-                    resizeMode="cover"
-                    alt={/* post.user.name */ 'xd'}
-                    source={{
-                      uri: post.user.picture
-                    }}
-                  />
-                </AspectRatio>
+              <View style={styles.userInfo}>
+                <Image
+                  style={styles.image}
+                  source={{ uri: post.user.picture }}
+                  resizeMode='cover'
+                />
 
                 <Text
                   style={[
                     styles.user,
-                    // eslint-disable-next-line prettier/prettier
-                    post.user.email === auth?.currentUser?.email && styles.userMe
+                    post.user.email === auth?.currentUser?.email && styles.userMe,
                   ]}
                 >
                   {post.user.name}
                 </Text>
-              </HStack>
-
-              <HStack w="100%" justifyContent="flex-start" pt={2}>
+              </View>
+              
+              <View style={styles.postContent}>
                 <Text
                   style={[
-                    styles.post,
-                    // eslint-disable-next-line prettier/prettier
-                    post.user.email === auth?.currentUser?.email && styles.userMe
+                    styles.postText,
+                    post.user.email === auth?.currentUser?.email && styles.userMe,
                   ]}
                 >
                   {post.text}
                 </Text>
-              </HStack>
-            </VStack>
-          </HStack>
+              </View>
+            </View>
+          </View>
         ))}
     </ScreenWrapper>
   )
@@ -155,23 +114,58 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderRadius: 10
+    borderRadius: 10,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   btnText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  postContainer: {
+    width: '100%',
+    marginVertical: 8,
+    justifyContent: 'center',
+  },
+  post: {
+    width: '90%',
+    alignSelf: 'center',
+    borderRadius: 8,
+    padding: 8,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#9ca3af',
+  },
+  image: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    marginRight: 8,
   },
   user: {
     fontSize: 12,
     color: '#303030',
-    fontWeight: '700'
+    fontWeight: '700',
   },
   userMe: {
-    color: '#F1F1F1'
+    color: '#F1F1F1',
   },
-  post: {
+  postContent: {
+    width: '100%',
+    paddingTop: 8,
+  },
+  postText: {
     fontSize: 16,
-    color: '#303030'
-  }
+    color: '#303030',
+  },
 })

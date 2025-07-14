@@ -1,20 +1,19 @@
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Alert, StyleSheet, TextInput } from 'react-native'
-import { useRecoilState } from 'recoil'
 
 import ActionButton from '../components/ActionButton'
 import FeelingList from '../components/FeelingsList'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
 import { auth, database } from '../config/firebase'
-import { emotionState, feelState } from '../providers/dailyState'
+import { useEmotionState, useFeelState } from '../providers/dailyState'
 import colors from '../theme/colors'
 import { feelings } from '../utils/getFeelings'
 
 export default function DailyScreen({ navigation }) {
-  const [emotion] = useRecoilState(emotionState)
-  const [, setFeeling] = useRecoilState(feelState)
+  const emotion = useEmotionState((state) => state.emotion)
+  const setFeeling = useFeelState((state) => state.setFeel)
 
   const [feel, setFeel] = useState('')
 
@@ -42,18 +41,18 @@ export default function DailyScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="¿Como te sientes hoy?" mt={4} />
+      <Title text='¿Como te sientes hoy?' mt={4} />
       <FeelingList feelings={feelings} />
-      <Title text="Escribe tu estado de animo" mt={4} />
+      <Title text='Escribe tu estado de animo' mt={4} />
 
       <TextInput
         style={styles.input}
         editable
         multiline
         numberOfLines={9}
-        placeholder="Escribe tu estado de animo aquí"
-        autoCapitalize="none"
-        keyboardType="default"
+        placeholder='Escribe tu estado de animo aquí'
+        autoCapitalize='none'
+        keyboardType='default'
         value={feel}
         onChangeText={(text) => setFeel(text)}
       />

@@ -16,16 +16,17 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import { useRecoilState } from 'recoil'
 
 import { database } from '../config/firebase'
-import { headerState } from '../providers/headerState'
-import { userState } from '../providers/userState'
+import { useHeaderState } from '../providers/headerState'
+import { useUserState } from '../providers/userState'
+
 const backImage = require('../../assets/images/backImage.jpg')
 
 export default function CreditCardScreen({ navigation }) {
-  const [userLogged, setUserLogged] = useRecoilState(userState)
-  const [, setHeaderShow] = useRecoilState(headerState)
+  const userLogged = useUserState((state) => state.user)
+  const setUserLogged = useUserState((state) => state.setUser)
+  const setHeaderShow = useHeaderState((state) => state.setHeaderVisible)
 
   const [name, setName] = useState('')
   const [curp, setCurp] = useState('')
@@ -54,6 +55,7 @@ export default function CreditCardScreen({ navigation }) {
         })
 
         const updatingUser = doc(database, 'users', userLogged.id)
+
         updateDoc(updatingUser, {
           ...userLogged,
           premium: true
@@ -79,10 +81,10 @@ export default function CreditCardScreen({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Nombre en la tarjeta"
-          autoCapitalize="none"
-          keyboardType="default"
-          textContentType="givenName"
+          placeholder='Nombre en la tarjeta'
+          autoCapitalize='none'
+          keyboardType='default'
+          textContentType='givenName'
           autoFocus={true}
           value={name}
           onChangeText={(text) => setName(text)}
@@ -90,20 +92,20 @@ export default function CreditCardScreen({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="CURP"
-          autoCapitalize="none"
-          keyboardType="default"
-          textContentType="givenName"
+          placeholder='CURP'
+          autoCapitalize='none'
+          keyboardType='default'
+          textContentType='givenName'
           value={curp}
           onChangeText={(text) => setCurp(text)}
         />
 
         <TextInput
           style={styles.input}
-          placeholder="Numero de tarjeta"
-          autoCapitalize="none"
-          keyboardType="default"
-          textContentType="givenName"
+          placeholder='Numero de tarjeta'
+          autoCapitalize='none'
+          keyboardType='default'
+          textContentType='givenName'
           value={number}
           onChangeText={(text) => setNumber(text)}
         />
@@ -111,20 +113,20 @@ export default function CreditCardScreen({ navigation }) {
         <View style={styles.horizontalView}>
           <TextInput
             style={[styles.input, styles.inputHorizontal]}
-            placeholder="MM/AA"
-            autoCapitalize="none"
-            keyboardType="default"
-            textContentType="givenName"
+            placeholder='MM/AA'
+            autoCapitalize='none'
+            keyboardType='default'
+            textContentType='givenName'
             value={date}
             onChangeText={(text) => setDate(text)}
           />
 
           <TextInput
             style={[styles.input, styles.inputHorizontal]}
-            placeholder="CVC"
-            autoCapitalize="none"
-            keyboardType="default"
-            textContentType="givenName"
+            placeholder='CVC'
+            autoCapitalize='none'
+            keyboardType='default'
+            textContentType='givenName'
             value={cvc}
             onChangeText={(text) => setCvc(text)}
           />

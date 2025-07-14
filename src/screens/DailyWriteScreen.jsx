@@ -2,17 +2,17 @@ import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Alert, StyleSheet, TextInput } from 'react-native'
 
-import { useRecoilState } from 'recoil'
 import ActionButton from '../components/ActionButton'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
 import { auth, database } from '../config/firebase'
-import { suggestState } from '../providers/suggestState'
+import { useSuggestState } from '../providers/suggestState'
 import colors from '../theme/colors'
 import getRandomColor from '../utils/getRandomColor'
 
 export default function DailyWriteScreen({ navigation }) {
-  const [, setSuggest] = useRecoilState(suggestState)
+  const setSuggest = useSuggestState((state) => state.setSuggest)
+  const setWrite = useSuggestState((state) => state.setWrite)
   const [dailyText, setDailyText] = useState('')
 
   useEffect(() => {
@@ -27,7 +27,9 @@ export default function DailyWriteScreen({ navigation }) {
       createdAt: serverTimestamp()
     })
       .then((docRef) => {
-        console.log('Document written with ID: ', docRef.id)
+        setWrite({
+          id: docRef.id,
+        })
       })
       .catch((error) => {
         console.error('Error adding document: ', error)
@@ -39,16 +41,16 @@ export default function DailyWriteScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="Escribe como te sientes" mt={4} />
+      <Title text='Escribe como te sientes' mt={4} />
 
       <TextInput
         style={styles.input}
         editable
         multiline
         numberOfLines={18}
-        placeholder="El dia de hoy..."
-        autoCapitalize="none"
-        keyboardType="default"
+        placeholder='El dia de hoy...'
+        autoCapitalize='none'
+        keyboardType='default'
         value={dailyText}
         onChangeText={(text) => setDailyText(text)}
       />

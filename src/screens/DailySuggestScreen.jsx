@@ -1,18 +1,17 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
-import { useRecoilState } from 'recoil'
 
 import ActionButton from '../components/ActionButton'
 import ScreenWrapper from '../components/ScreenWrapper'
 import Title from '../components/Title'
 import { SERVER_LINK } from '../constants/server'
-import { emotionState, feelState } from '../providers/dailyState'
+import { useEmotionState, useFeelState } from '../providers/dailyState'
 import colors from '../theme/colors'
 
 export default function DailySuggestScreen({ navigation }) {
-  const [emotion] = useRecoilState(emotionState)
-  const [feeling] = useRecoilState(feelState)
+  const emotion = useEmotionState((state) => state.emotion)
+  const feeling = useFeelState((state) => state.feel)
 
   const [suggests, setSuggests] = useState('')
 
@@ -41,7 +40,7 @@ export default function DailySuggestScreen({ navigation }) {
 
   return (
     <ScreenWrapper>
-      <Title text="Algunas sugerencias" mt={4} />
+      <Title text='Algunas sugerencias' mt={4} />
 
       <View style={styles.textContainer}>
         <Text style={styles.text}>{suggests}</Text>

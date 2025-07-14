@@ -9,14 +9,13 @@ import {
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
-import { useRecoilState } from 'recoil'
 
 import { auth, database } from '../config/firebase'
 import { SERVER_LINK } from '../constants/server'
-import { userState } from '../providers/userState'
+import { useUserState } from '../providers/userState'
 
 export default function ChatBotScreen() {
-  const [userLogged] = useRecoilState(userState)
+  const userLogged = useUserState((state) => state.user)
   const [chatMessages, setChatMessages] = useState([])
 
   useLayoutEffect(() => {
@@ -47,16 +46,13 @@ export default function ChatBotScreen() {
     async (messages = []) => {
       const { _id, createdAt, text, user } = messages[0]
 
-      // Realizar la petición HTTP POST
       try {
         const response = await axios.post(`${SERVER_LINK}/api/chatgpt`, {
           prompt: text
         })
 
-        // Obtener el mensaje de respuesta de la petición
         const responseMessage = response.data.message.content
 
-        // Agregar el mensaje de respuesta al arreglo de mensajes del chat
         const updatedMessages = [
           {
             _id: Math.random().toString(),
@@ -72,13 +68,13 @@ export default function ChatBotScreen() {
 
         setChatMessages(updatedMessages)
 
-        // Guardar el mensaje enviado y la respuesta en la colección chats de Firebase
         addDoc(collection(database, 'chats'), {
           _id,
           createdAt,
           text,
           user
         })
+
         addDoc(collection(database, 'chats'), {
           _id: Math.random().toString(),
           createdAt: new Date(new Date().getTime() + 10000),

@@ -11,14 +11,14 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import { useRecoilState } from 'recoil'
 
 import { auth, database } from '../config/firebase'
-import { userState } from '../providers/userState'
+import { useUserState } from '../providers/userState'
+
 const backImage = require('../../assets/images/backImage.jpg')
 
 export default function SignUpScreen({ navigation }) {
-  const [, setLoggedUser] = useRecoilState(userState)
+  const setLoggedUser = useUserState((state) => state.setUser)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -73,10 +73,10 @@ export default function SignUpScreen({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Escribe tu Nombre"
-          autoCapitalize="none"
-          keyboardType="default"
-          textContentType="givenName"
+          placeholder='Escribe tu Nombre'
+          autoCapitalize='none'
+          keyboardType='default'
+          textContentType='givenName'
           autoFocus={true}
           value={name}
           onChangeText={(text) => setName(text)}
@@ -84,21 +84,21 @@ export default function SignUpScreen({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Escribe tu Email"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          textContentType="emailAddress"
+          placeholder='Escribe tu Email'
+          autoCapitalize='none'
+          keyboardType='email-address'
+          textContentType='emailAddress'
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
 
         <TextInput
           style={styles.input}
-          placeholder="Escribe tu Password"
-          autoCapitalize="none"
+          placeholder='Escribe tu Password'
+          autoCapitalize='none'
           autoCorrect={false}
           secureTextEntry={true}
-          textContentType="password"
+          textContentType='password'
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
@@ -109,6 +109,7 @@ export default function SignUpScreen({ navigation }) {
 
         <View style={styles.accountView}>
           <Text style={styles.textAccount}>¿Ya tienes una cuenta?</Text>
+
           <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <Text style={styles.registerText}>Inicia sesión</Text>
           </TouchableOpacity>

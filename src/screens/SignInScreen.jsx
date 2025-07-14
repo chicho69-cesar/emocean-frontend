@@ -11,14 +11,14 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import { useRecoilState } from 'recoil'
 
 import { auth, database } from '../config/firebase'
-import { userState } from '../providers/userState'
+import { useUserState } from '../providers/userState'
+
 const backImage = require('../../assets/images/backImage.jpg')
 
 export default function SignInScreen({ navigation }) {
-  const [, setLoggedUser] = useRecoilState(userState)
+  const setLoggedUser = useUserState((state) => state.setUser)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -66,10 +66,10 @@ export default function SignInScreen({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Escribe tu Email"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          textContentType="emailAddress"
+          placeholder='Escribe tu Email'
+          autoCapitalize='none'
+          keyboardType='email-address'
+          textContentType='emailAddress'
           autoFocus={true}
           value={email}
           onChangeText={(text) => setEmail(text)}
@@ -77,11 +77,11 @@ export default function SignInScreen({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Escribe tu Password"
-          autoCapitalize="none"
+          placeholder='Escribe tu Password'
+          autoCapitalize='none'
           autoCorrect={false}
           secureTextEntry={true}
-          textContentType="password"
+          textContentType='password'
           value={password}
           onChangeText={(text) => setPassword(text)}
         />

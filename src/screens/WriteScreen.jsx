@@ -10,11 +10,11 @@ export default function WriteScreen({ navigation, route }) {
     color: '#FFF',
     date: getTextCompleteDate(new Date()),
     description: '',
+    write: '',
     id: 1
   })
 
   useEffect(() => {
-    console.log(route)
     setWrite({ ...route.params })
   }, [route])
 
@@ -24,6 +24,10 @@ export default function WriteScreen({ navigation, route }) {
 
       <View style={[styles.textContainer, { backgroundColor: write.color }]}>
         <Text style={styles.text}>{write.description}</Text>
+      </View>
+
+      <View style={[styles.textContainer, { backgroundColor: '#eee', marginTop: 0 }]}>
+        <Text style={styles.text}>{write.write}</Text>
       </View>
     </ScreenWrapper>
   )

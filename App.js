@@ -1,13 +1,11 @@
 import { StatusBar } from 'expo-status-bar'
-import { RecoilRoot } from 'recoil'
-
-import Main from './src/Main'
+import Router from './src/Router'
 
 export default function App() {
   return (
-    <RecoilRoot>
-      <StatusBar style="auto" />
-      <Main />
-    </RecoilRoot>
+    <>
+      <StatusBar style='auto' />
+      <Router />
+    </>
   )
 }
